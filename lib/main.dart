@@ -28,7 +28,12 @@ final String title;
 State<InventoryHomePage> createState() => _InventoryHomePageState();
 }
 class _InventoryHomePageState extends State<InventoryHomePage> {
-// TODO: Implement Firestore integration
+final TextEditingController _nameController = TextEditingController();
+final TextEditingController _priceController = TextEditingController();
+final CollectionReference _products = FirebaseFirestore.instance.collection(
+    'product',
+  );
+  
 @override
 Widget build(BuildContext context) {
 return Scaffold(
