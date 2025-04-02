@@ -88,6 +88,13 @@ Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
   );
 }
 
+// Deleting a product by id
+  Future<void> _deleteProduct(String productId) async {
+    await _products.doc(productId).delete();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('You have successfully deleted a product')),
+    );
+  }
 @override
 Widget build(BuildContext context) {
 return Scaffold(
