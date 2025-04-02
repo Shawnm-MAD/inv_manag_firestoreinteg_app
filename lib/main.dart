@@ -139,3 +139,11 @@ Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
           return const Center(child: CircularProgressIndicator());
         },
       ),
+      // Add new product
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _createOrUpdate(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
