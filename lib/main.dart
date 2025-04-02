@@ -33,7 +33,61 @@ final TextEditingController _priceController = TextEditingController();
 final CollectionReference _products = FirebaseFirestore.instance.collection(
     'product',
   );
-  
+
+Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+  String action = 'create';
+  if (documentSnapshot != null) {
+    action = 'update';
+    _nameController.text = documentSnapshot['name'];
+    _priceController.text = documentSnapshot['quantity'].toString();
+  }
+  await showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    builder: (BuildContext ctx) {
+      return Padding(
+        padding: EdgeInsets.only(
+          top: 20, left: 20, right: 20, bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+        ),
+        child: Column(
+         mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              controller: _priceController,
+              decoration: const InputDecoration(labelText: 'Quantity'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              child: Text(action == 'create' ? 'Create' : 'Update'),
+              onPressed: () async {
+                String name = _nameController.text;
+                double price = double.parse(_priceController.text);
+                if (name.isNotEmpty && price != null) {
+                  if (action == 'create') {
+                    await _products.add({"name": name, "quantity": price});
+                  }
+                  if (action == 'update') {
+                    await _products.doc(documentSnapshot!.id).update({"name": name, "quantity": price});
+                  }
+                  _nameController.text = '';
+                  _priceController.text = '';
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 @override
 Widget build(BuildContext context) {
 return Scaffold(
