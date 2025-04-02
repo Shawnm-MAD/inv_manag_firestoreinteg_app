@@ -9,16 +9,17 @@ void main() async {
   runApp(InventoryApp());
 }
 class InventoryApp extends StatelessWidget {
-@override
+  @override
 Widget build(BuildContext context) {
-return MaterialApp(
-title: 'Inventory Management App',
-theme: ThemeData(
-primarySwatch: Colors.blue,
-),
-home: InventoryHomePage(title: 'Inventory Home Page'),
-);
-}
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'Inventory Management App',
+    home: Container(
+    color:Colors.indigoAccent,
+    child: InventoryHomePage(title: 'Inventory Home Page'),
+    )
+    );
+  }
 }
 class InventoryHomePage extends StatefulWidget {
 InventoryHomePage({Key key, this.title}) : super(key: key);
