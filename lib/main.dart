@@ -22,10 +22,10 @@ Widget build(BuildContext context) {
   }
 }
 class InventoryHomePage extends StatefulWidget {
-InventoryHomePage({Key key, this.title}) : super(key: key);
+InventoryHomePage({Key? key, required this.title}) : super(key: key);
 final String title;
 @override
-_InventoryHomePageState createState() => _InventoryHomePageState();
+State<InventoryHomePage> createState() => _InventoryHomePageState();
 }
 class _InventoryHomePageState extends State<InventoryHomePage> {
 // TODO: Implement Firestore integration
