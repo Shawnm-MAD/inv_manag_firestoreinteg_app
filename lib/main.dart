@@ -95,30 +95,47 @@ Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
       const SnackBar(content: Text('You have successfully deleted a product')),
     );
   }
-@override
-Widget build(BuildContext context) {
-return Scaffold(
-appBar: AppBar(
-title: Text(widget.title),
-),
-body: Center(
-child: Column(
-mainAxisAlignment: MainAxisAlignment.center,
-children: <Widget>[
-Text(
-'Inventory Management System',
-),
-// TODO: Implement inventory list view
-],
-),
-),
-floatingActionButton: FloatingActionButton(
-onPressed: () {
-// TODO: Implement add inventory item
-},
-tooltip: 'Add Item',
-child: Icon(Icons.add),
-),
-);
-}
-}
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('CRUD operations')),
+      // Using StreamBuilder to display all products from Firestore in
+      body: StreamBuilder(
+        stream: _products.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            return ListView.builder(
+              itemCount: streamSnapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                    streamSnapshot.data!.docs[index];
+                return Card(
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(documentSnapshot['name']),
+                    subtitle: Text(documentSnapshot['quantity'].toString()),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _createOrUpdate(documentSnapshot),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed:
+                                () => _deleteProduct(documentSnapshot.id),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
